@@ -1,0 +1,74 @@
+GRUB(Boot loader):
+	grub:grand unified bootloader
+	frub 0.x : grub legacy
+	grub 1.x : grub 2 
+	
+grub legacy :
+	state1: mbr
+	state1.5: mbr之后的扇区,让stage1中的bootloader能识别stage2所在分区上的文件系统
+	state2:磁盘分区(/boot/grub/)
+	
+配置文件:/boot/grub/grub.conf <-- /etc/grub.conf
+
+	stage2及内核等通常放置于一个基本磁盘分区
+
+grub功能:
+	1.提供菜单,并提供交互式接口:
+		c:打开命令行界面
+		e:边界模式,用于编辑菜单
+	2.加载用户选择的内核或是操作系统
+		允许传递参数给内核
+	3.为菜单提供了保护机制
+	为编辑菜单进行认证
+	为启动内核或是操作系统进行认证
+	
+如何识别设备
+	(hd#,#):第几个磁盘的第几个分区
+	
+
+
+grub的命令行接口
+	help:获取帮助列表:
+	HELP KEYWORD 
+	find (hd#,#)/path/to/somefile
+	root (hd#,#)
+	kernel /path/to/kernel_file:设置本次启动时用到的内核文件:额外和可以体啊加许多内核支持使用的cmdline参数:
+	例如:init/path/to/init,selinux=0
+	initrd /path/to/initramfs_file:设定为选定的内核提供额外文件的ramdisk(必须做到与内核版本完全匹配)
+	boot:引导启动选定的内核
+
+手动在grub命令行接口启动系统流程:
+]	grub> root (hd#,#)
+	grub> kernel /vmlinux-VERSION-RELEASE ro root=/dev/DEVICE
+	grub> initrd /initramfs-VERSION-RELEASE.img
+	grub> boot
+
+配置文件:  /boot/grub/grub.conf
+	配置项:
+	default=#:设置默认启动的菜单项:菜单项(titile)编号从0开始:
+	timeout=#: 指定才菜单项等待选择的时长
+	splshimage=*hd#,#)/path/to/xmp_pic_file :指明菜单背景图皮文件路径:
+	hiddenmenu:隐藏菜单;		
+	password [--md5] string;菜单编辑认证
+	titile titile:定义菜单标题,可出现多次:
+		root (hd#,#)(:grub查找stage2 及kernel问家所在设备分区:为grub的"根"
+		kernel /path/to/vmlinuz_file [patrameters] 启动的内核:
+		initrd /path/to/initramfs_file: 内核匹配的ramfs文件:
+		password [--md5] string : 启动选定的内核或操作系统时进行认证;	
+
+	grub-md5-crypt 命令:
+	
+进入单用户模式:
+	1.编辑grub菜单(要选定编辑的提提了,而后使用e命令)
+	2.在选定的kernel后附加
+		1,s,S single
+	3.在kernel所在行, 键入b命令;
+
+安装grub:
+	1.grub-install
+	2.grub-install --root-directory=ROOT /dev/DSIK
+
+	2.grub
+		grub> root (hd#,#)
+		grub> set up (hd#) 
+ 

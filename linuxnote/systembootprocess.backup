@@ -1,0 +1,189 @@
+Centos系统启动流程;
+linux系统的组成部分:内核+根文件系统
+内核:进程管理(cpu视角),内存分配(内存视角),网络协议栈,文件系统(在内核中实现),驱动程序,安全功能;
+	IPC:inter Process Communication 进程间通信机制;
+	消息队列,semerphor,shm
+	socket
+	
+运行中的系统环境可分为两层:内核空间和用户空间;
+	用户空间:应用程序(进程或线程)
+	内核空间:内核代码(系统调用)
+
+
+内核设计流派
+	单内核设计:把所有功能集成与同一程序;
+		linux 
+	微内核设计:每种功能使用一个单独的子系统实现;
+		windows solaris
+
+
+linux内核特点:
+		支持模块化
+		支持模块运行时动态转载或卸载;
+		kernel 文件通常以.ko结尾
+
+linux组成部分:
+		核心文件 /boot/
+		用于磁盘初始化(基于内存)程序中有磁盘驱动程序) ramdisk
+		centos5 : /boot/initrc-VERSIONI-realease.img
+		centos 6,7 : /boot/initramfs-VERSION-realease.img
+-----------------------------------------------------------------
+		Centos系统的启动流程:
+-----------------------------------------------------------------
+
+	POST:加电自检
+		ROM:CMOS
+			BIOS:basic input output system
+		
+		模块文件/lib/modules
+	BOOT Sequence :
+		按次序查找个引导设备,第一个有引导程序的设备即为本次启动要用到的设备;
+	bootloader :引导加载器
+		windows ntloader
+		linux : LILO :linux loader 
+		GRUB : grand uniform bootloader 
+	功能: 提供一个菜单,yyunxu用户选择要启动的系统或不同的内核版本,把用户选定的内核装载到ram中特定的空间中, 加压展开,然后吧系统的控制权移交给内核
+	MBR:Master boot lrecord 
+		512bytes:
+			446bytes:bootloader
+			64bytes; fat
+			2bytes : 55AA
+	GRUB:有两个阶段
+		bootloader:1st stage
+		Partition :filesystem driver, 1.5 stage 	
+		partition:/boot/grub 2st stage 
+	UEFI:
+
+Kernel :
+	自身初始话:
+		探测可视别的所有硬件设备;
+		加载硬件驱动程序;(有可能借助ramdisk加载驱动)
+		以只读方式挂载文件系统;
+		运行用户空间的第一个程序中:/sbin/init 
+			init 程序的类型:
+				sentos5: SysV init
+					配置文件:/etc/inittab
+				sentos6: Upstart 
+					配置文件:/etc/inittab(几乎没用为了兼容centos5)
+						/etc/init/*.conf
+				sentos7: Systemd
+					配置文件/usr/lib/systemd/system/, /etc/systemd/system/	
+			
+	
+	ramdisk:
+		linux内核的特性之一:使用缓冲和缓存来加速对因盘上的文件访问;
+		ramdisk-->ramfs 
+		Centos 5 : initrd
+			创建程序:mkinitrd
+		Centos 67 : initramfs 
+			创建程序:dracut, mkinitrd
+
+
+-----------------------------------------------------------------
+		运行级别
+-----------------------------------------------------------------
+运行级别:为了系统的运行或维护等目的而设定的机制:
+	0-6:7个级别:
+		0:shutdown : 
+		1:单用户模式,root用户,无需认证:维护模式:
+		2:多用户模式:启动网络功能,不起动NFS:维护模式
+		3:多用户模式,完全功能模式,文本界面
+		4:预留级别:目前无特别使用目的,但习惯同治级别功能使用;
+		5:多用户模式;完全功能模式,图形界面
+		6:reboot
+
+		级别查看
+		 who -r 
+		 runlevel 
+-----------------------------------------------------------------
+		配置文件/etc/inittab
+-----------------------------------------------------------------
+每行定义一种action以及与之对应的proess
+	id:runlevels:action:process
+		id:一个任务的标识符
+		runlevels:在那些级别启动此任务:可以为空,表示所有级别:
+		action:在什么条件下启动次任务;
+		process:任务:
+		
+	action:
+	wait:扽该切换至此任务所在级别是执行一次;
+	respawn:一旦此任务终止,就自动重新启动
+	initdefault:设定默认yunxig级别:此时,process省略
+	sysint:设定系统初始化方式,此处一般指定为/etc/rc.d/rc.sysinit脚本;	
+
+
+id:3:initdefault
+si::sysinit:/etc/rc.d/rc.sysinit
+
+IO:0:wait:/etc/rc.d/rc 3
+	意味这启动或关闭/etc/rcd/rc3.d目录下的服务脚本所控制服务;
+	K*:要停止的服务:K##*,优先级,数字越小,越是优先关闭;依赖的服务先关闭,而后关闭被依赖的;
+	S*:要启动的服务:S##*,优先级,数字越小,越是优先启动;被依赖的服务先启动,而依赖的服务后启动;
+	
+	rc脚本:接受运行级别的数字为参数:
+		
+	脚本框架:
+		for srv in /etc/rc#.d/K*;do
+			$srv stop
+		done
+		
+		for srv in /etc/rc#.d/K*;do
+			#srv start
+		done
+
+/etc/init.d/*(/etc/rc.d/init.d/*)脚本执行方式
+	#/etc/init.d/SRV_SCRIPT {start|stop|restart|status|}
+	# service SRV_SCRIPT {{start|stop|restart|status}
+
+		chkconfig:管控服务脚本/etc/init.d/在各个级别下启动或关闭状态
+
+	查看:chkconfig --list [name]
+	添加: chkconfig --add name 
+		能被添加的服务的脚本格式之一:
+			#!/bin/bash
+			#
+			# chkconfig:LLL NN NN
+			# description
+	删除:chkconfig --del name
+	修改指定的链接类型:
+		chkconfig [--level LEVELS] name <on|off|reset>
+		--level levels:指定要控制的级别默认是2345
+	note:正常级别下,最后启动的一个服务s99local没有链接至/etc/initd下的某脚本,而是链接到了/etc/rc.d/rc.local 脚本因此,不便或是,不需要写为服务脚本的程序期望能够开机启动时,直接放置与此脚本中即可;
+	
+	tty1:2345:respawn:/usr/sbin/mingetty tty1
+	TTY7:5:respawn:/etc/X11/
+	tty6:2345:respawn:/usr/sbin/mingetty tty6
+		1.mingetty会调用的login程序
+		2.打开虚拟终端的程序除了mingetty之外;还有诸如getty等;
+	
+	系统初始化脚本:/etc/rc.d/rc.ssyinit
+	1.设置主机名:
+	2.设置欢迎信息;
+	3.激活udev和selinux;
+	4.挂载/etc/fstab文件中定义的所有文件系统;
+	5.检测根文件系统,并一度写方式重新挂载根文件系统;
+	6.设置系统始终;
+	7.根据/etc/sysctlconf 文件来设置呢和参数
+	8.激活lvm及软raid设备;
+	9.激活swap设备;
+	10.加载额外设备的驱动程序;
+	11.清理操作;
+	
+
+总结;(用户空间的启动流程):/sbin/init(etc/inittab)
+	设置默认运行级别-->运行系统初始化脚本,完成系统初始化-->关闭对应级别下要停止的服务,启动对应级别下需要开启的服务-->设置登录终端-->启动图形终端;
+
+Centos 6 : 
+init 程序:upstart,但依然为/sbin/init,
+配置文件:
+	/etc/init/*.conf,/etc/inittab(仅用于定义默认运行级别)
+	note:*.conf为upstart风格的配置文件
+
+Centos7 :
+init 程序:systemd
+配置文件:/usr/lib/systemd/system/*,
+	/etc/systemd/system/*
+	
+
+
+

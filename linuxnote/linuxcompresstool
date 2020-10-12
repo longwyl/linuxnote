@@ -1,0 +1,68 @@
+--------------------------------------------------------------------------------
+				压缩工具
+--------------------------------------------------------------------------------
+note : 通常只压缩文本性质的文件(非二进制文件)
+
+--------------------------------------------------------------------------------
+.gz				gzip/gunzip
+--------------------------------------------------------------------------------
+       gzip [ -acdfhklLnNrtvV19 ] [-S suffix] [ name ...  ]
+       gunzip [ -acfhklLnNrtvV ] [-S suffix] [ name ...  ]
+       zcat [ -fhLV ] [ name ...  ]
+gzip:
+	option : 
+		-d : decompress
+		-c :  Write  output  on  standard output; keep original files unchanged.
+		-# :指定压缩比(1-9)default:6
+		
+--------------------------------------------------------------------------------
+.bz2				bzip2/bunzip2/bzcat
+--------------------------------------------------------------------------------
+       bzip2 [ -cdfkqstvzVL123456789 ] [ filenames ...  ]
+       bunzip2 [ -fkvsVL ] [ filenames ...  ]
+       bzcat [ -s ] [ filenames ...  ]
+       bzip2recover filename
+bzip2:
+	option:
+		-k:Keep (don't delete) input files during compression or decompression.
+		-d --decompress
+--------------------------------------------------------------------------------
+.xz				xz/unxz/xzcat
+--------------------------------------------------------------------------------
+	xz [option...]  [file...]
+	option:
+		-d : decompress 
+		-# :
+		-k : Don't delete the input files;
+--------------------------------------------------------------------------------
+				归档
+--------------------------------------------------------------------------------
+tool: tar ,cpio
+tar -A [OPTIONS] ARCHIVE ARCHIVE
+
+	创建归档: -c -f /PATH/TO/SOMEFILE.tar file...
+	展开归档: -x -f file.tar -C /PATH
+	查看归档文件的文集列表: -t
+	归档并压缩:
+		-z: gzip2
+			-zcf /path/to/somefile.tar.gz file...
+			-zxf /path/somefile.tar.gz
+
+		-g: bzip2
+			-jcf
+			-jxf 
+
+--------------------------------------------------------------------------------
+				zip
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+

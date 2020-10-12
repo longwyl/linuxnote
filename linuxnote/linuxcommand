@@ -1,0 +1,132 @@
+stemctl
+service
+chkconfig // Centos6
+tty
+ss -ntl
+ifconfig
+ip addr list 
+echo
+ping 
+systemctl
+systemd
+systemctl poweroff 
+poweroff
+systemctl reboot
+reboot
+basename 
+dirname
+file
+type
+help COMMAND(buildin)
+man 
+whatis 
+useradd
+id 
+info command
+pwd
+cd ~username
+halt
+shutdown
+wall
+ls 
+cat 
+tail
+tac
+head
+more 
+less 
+date
+clock
+hwclock
+cal
+which 
+whereis 
+who 
+whoami
+alias
+unalias
+/ command
+history 
+!#
+!!
+!$ // invoke the argument of the last command  
+$(COMMAND)
+`COMMAND`
+$?
+""
+''
+``
+touch 
+tr 
+tee
+hash
+set
+unset
+export
+env
+printenv
+declare -r -x
+readonly name
+pstree
+useradd 
+groupadd 
+usermod
+groupmod
+userdel
+groupdel
+passwd
+gpasswd
+newgrp
+chage
+id
+finger
+chsh
+chfn
+who
+whoami
+pwck
+grpck
+chmod
+chown
+chgroup
+umask
+install
+mktemp
+stat
+grep
+egrep
+fgrep
+sed
+awk
+wc
+sort
+diff 
+patch
+vim 
+find 
+locate
+xargs
+setfacl
+getfacl
+mkfs 
+mke2fs 
+e2label
+tune2fs
+dumpe2fs
+e2fcsk
+blkid
+fsck
+df
+du
+fdisk
+gdisk
+mount
+umount
+lsof 
+fuser	
+
+
+
+
+
+

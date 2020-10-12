@@ -1,0 +1,58 @@
+
+fdisk /dev/sd#
+/boot -> 200M
+swap -> 2G   150% of your physical memory
+/ ->8G       at least 25G 
+/home -> 9G	
+
+mkfs,ext4 /dev/sd#1
+mkfs,ext4 /dev/sd#3
+mkfs,ext4 /dev/sd#4
+mkswap /dev/sd#2
+swapon /dev/sd#2
+
+mount /dev/sdb3 /mnt 挂载根文件系统
+
+mkdir /mnt/boot
+mkdir /mnt/home
+
+mount /dev/sd#1 /mnt/boot
+mount /dev/sd#4 /mnt/home
+
+pacstrap /mnt base base-devel vim
+
+genfstab /mnt genfstab -U /mnt >> /mnt/etc/fstab
+
+arch-chroot /mnt 
+
+pacman -S networkmanager
+
+systemctl enable NetworkManager
+
+pacman -S grub
+
+grub-install --target=i386-pc /dev/sd# grub-mkconfig -o /boot/grub/grub.cfg
+
+passwd
+
+vim /etc/locale.gen
+locale-gen
+vim /etc/locale.conf
+
+ls /usr/share/zoneinfo/Asia/Shanghai
+ls -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+vim /etc/hostname
+
+exit
+umount -R /mnt
+reboot
+
+
+
+
+
+
+
+
+

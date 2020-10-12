@@ -1,0 +1,78 @@
+kernel,kernelobject,ramdisk
+
+kernel:uname
+kernel object:lsmod,modinfo,modprobe,insmod,rmmod,depmod
+ramdisk:mkinitrd,dracut
+
+POST -> BootSequenc(BIOS)->bootloader(MBR)->(kernelramdisk)->rootfs(switch_root)->/sbin/init(/etc/inittab,/etc/init/*,/usr/lib/systemd/system/)->default runlevel , systeminit,start close service ,start terminal(maybe GUI)
+
+grub:
+	1st :mbr
+	1.5st : the sector follow mbr
+	2st:/boot/grub/
+
+compile kernel
+	1.enviroment
+	2.hardware information
+	3.funcution of system
+	4.source code of kernel
+
+	development tools
+	server platform development
+	
+	cpu:
+		lscpu
+		cat /proc/info
+		x86info
+	pci: 
+		lspci
+		lsusb
+		lsblk
+	hardinfo
+		hal-device
+------------------------------------
+~]# tar xv linux-version.tar.zx -C /usr/src
+~]# cd /usr/src
+~]# ln linux-varsion linux
+~]# cd linux
+~]# make menuconfig
+~]# make [-J #]
+~}# make modules_install
+~]# make install
+
+
+
+
+
+1.config kernel option
+	cp /proc/config.gz ./
+	gunzip config.gz 
+	cp config.gz .config
+	command : make config
+			make menuconfig
+			make gconfig
+			make xonfig
+			make defconfig
+			make allnoconfig
+2.complie
+	1.multiply process build make [-j #]
+	2.build part of kernel 
+		cd /usr/src/linx
+		make path/to/dir
+			
+		cd /usr/src/linux
+		make path/to/dir/file.ko
+	3.jiaocha build
+		target system is different with the current system
+		#make ARCH=arch_name
+
+		get the help menu of the target system
+		#make ARCH=arch_name help
+
+3.compile base on source code which has been complied before 
+	# make clean :REmove most generated file but keep the config and enough build support to build external modules
+	#make mrproper
+	#make cistclean
+	to show above three command help manunal use make help command 
+;
+		

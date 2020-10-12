@@ -1,0 +1,36 @@
+为了实现资源的隔离 才有了用户
+用户：用户标识
+	用户认证
+	用户审计
+etc/passwd
+etc/group
+
+etc/shadow
+etc/gshadow
+
+/etc/login.defs
+
+command
+
+useradd 
+groupadd 
+usermod
+groupmod
+userdel
+groupdel
+passwd
+gpasswd
+newgrp
+chage
+id
+pwck
+grpck
+chsh
+chfn
+finger
+who
+whoami
+
+
+
+

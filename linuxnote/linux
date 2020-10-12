@@ -1,0 +1,79 @@
+-----------------------------------------------------------
+      通信加密和解密技术
+-----------------------------------------------------------
+Linux Service and Security:
+OpenSSL(ssl/tls)
+OpenSSH(ssh)
+bind(dns)
+web(http):httpd(apache),php,mariabd(mysql),LAMP,nginx(tengine,openresty),lnmp 
+file server : nfs,samba,ftp
+dhcp, pxe
+iptables
+sudo , pam , nsswitch
+OpenSSL
+      传输层协议：TCP,UDP,SCTP
+       port:进程地址，进程向内核注册使用某端口（独占）
+       统一主机上的进程通信：IPC,mesage queue,shm,semerphor
+       不同主机上的进程通信：socket
+       cip:port <-- -->sip:port
+       监听模式：Listen(ip:port)
+
+SSL:Secure Sockets Layer
+http --> ssl --> https
+  
+安全的目标：
+    保密性：confidentiality
+    完整性：integrty
+    可用性：availability
+
+攻击类型：
+    威胁保密性的攻击：窃听，通信量分析；
+    威胁完整性的攻击：更改，伪装， 重放，否认
+    威胁可用性的攻击：拒绝服务(DoS)
+
+解决方案：
+    加密技术：（加密和解密），服务（用于低于攻击的服务）
+
+    加密和解密：
+        传统的加密方法：替代加密方法，置换加密方法
+        现代加密方法：现代块加密方法
+
+    服务：
+        认证机制
+        访问控制机制
+
+    密钥算法和协议
+        对称加密
+        公钥加密
+        单向加密
+        认证协议
+Linux系统：OpenSSL(ssl),GPG(pgp)
+  
+    OpenSSL由三部分组成：
+        libencrypt库
+        libssl库
+        openssl多用途命令行工具
+
+    加密算法和协议： 
+        对称加密：加密和解密使用同一个密钥
+        DES:data encryption standard;
+        3DES:triple DES;
+        AES:advanced encryption standard:(128bit,192bits,256bits,384bits)
+        Blowfish
+        Twofish
+        IDEA
+        RC6
+        CAST5
+
+        特性：
+            1.加密和解密使用使用同一个密钥
+            2.将原始数据分割成固定大小的块，逐个进行加密
+        缺陷：
+            1.密钥过多;
+            2.密钥分发困难;
+
+
+
+
+
+
