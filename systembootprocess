@@ -164,7 +164,7 @@ IO:0:wait:/etc/rc.d/rc 3
 		1.mingetty会调用的login程序
 		2.打开虚拟终端的程序除了mingetty之外;还有诸如getty等;
 	
-	系统初始化脚本:/etc/rc.d/rc.ssyinit
+	系统初始化脚本:/etc/rc.d/rc.sysinit
 	1.设置主机名:
 	2.设置欢迎信息;
 	3.激活udev和selinux;
