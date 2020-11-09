@@ -13,13 +13,9 @@ git restore
 git stash
 git merge
 git config 
-
-
-
-
 git diff 
 git push
 git remote 
 git pull
 git fetch 
-
+git show
